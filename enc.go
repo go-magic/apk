@@ -74,6 +74,37 @@ func MainActivity(manifest *Manifest) (activity string, err error) {
 	return "", fmt.Errorf("no main activity found")
 }
 
+func GetMainMainActivity(manifest *Manifest) (activity string, err error) {
+	if manifest.Application.Activities == nil {
+		return "", fmt.Errorf("activities invalid")
+	}
+	for _, act := range *manifest.Application.Activities {
+		if act.IntentFilters == nil {
+			continue
+		}
+		for _, intent := range *act.IntentFilters {
+			if isMainIntentFilter(intent) {
+				return act.Name, nil
+			}
+		}
+	}
+	if manifest.Application.ActivityAliases == nil {
+		return "", fmt.Errorf("activityAliases invalid")
+	}
+	for _, act := range *manifest.Application.ActivityAliases {
+		if act.IntentFilters == nil {
+			continue
+		}
+		for _, intent := range *act.IntentFilters {
+			if isMainIntentFilter(intent) {
+				return act.TargetActivity, nil
+			}
+		}
+	}
+
+	return "", fmt.Errorf("no main activity found")
+}
+
 func isMainIntentFilter(intent IntentFilter) bool {
 	ok := false
 	for _, action := range intent.Actions {

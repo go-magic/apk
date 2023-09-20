@@ -50,9 +50,9 @@ type Activity struct {
 // IntentFilter specifies the types of intents that an activity, service, or broadcast receiver can
 // respond to.
 type IntentFilter struct {
-	Priority   *uint32     `xml:"http://schemas.android.com/apk/res/android priority,attr"`
-	Order      *int32      `xml:"http://schemas.android.com/apk/res/android order,attr"`
-	AutoVerify *bool       `xml:"http://schemas.android.com/apk/res/android autoVerify,attr"`
+	//Priority   *uint32     `xml:"http://schemas.android.com/apk/res/android priority,attr"`
+	//Order      *int32      `xml:"http://schemas.android.com/apk/res/android order,attr"`
+	//AutoVerify *bool       `xml:"http://schemas.android.com/apk/res/android autoVerify,attr"`
 	Actions    []Action    `xml:"action"`
 	Categories *[]Category `xml:"category"`
 	Data       *[]Data     `xml:"data"`
