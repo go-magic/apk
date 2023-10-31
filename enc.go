@@ -48,13 +48,15 @@ func MainActivity(manifest *Manifest) (activity string, err error) {
 		return "", fmt.Errorf("activities invalid")
 	}
 	if manifest.Application.ActivityAliases != nil {
-		for _, act := range *manifest.Application.ActivityAliases {
+		length := len(*manifest.Application.ActivityAliases)
+		for i := length - 1; i >= 0; i-- {
+			act := (*manifest.Application.ActivityAliases)[i]
 			if act.IntentFilters == nil {
 				continue
 			}
 			for _, intent := range *act.IntentFilters {
 				if isMainIntentFilter(intent) {
-					return act.TargetActivity, nil
+					return act.Name, nil
 				}
 			}
 		}
