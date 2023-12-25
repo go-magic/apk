@@ -23,7 +23,7 @@ func TestName(t *testing.T) {
 }
 
 func TestNewXMLFile(t *testing.T) {
-	app, err := GetApkInfo("D:\\temp\\temp\\laji\\111\\yingyuqupeiyin.apk")
+	app, err := GetApkInfo("D:\\temp\\temp\\laji\\111\\jinritoutiao.apk")
 	if err != nil {
 		t.Fatal(err)
 		return
