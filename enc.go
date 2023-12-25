@@ -44,26 +44,27 @@ func GetApkInfo(apk string) (*APK, error) {
 }
 
 func MainActivity(manifest *Manifest) (activity string, err error) {
-	if manifest.Application.Activities == nil {
-		return "", fmt.Errorf("activities invalid")
-	}
-	for _, act := range *manifest.Application.ActivityAliases {
-		if act.IntentFilters == nil || !(*act.Enabled) {
-			continue
-		}
-		for _, intent := range *act.IntentFilters {
-			if isMainIntentFilter(intent) {
-				return act.Name, nil
+	if manifest.Application.ActivityAliases != nil {
+		for _, act := range *manifest.Application.ActivityAliases {
+			if act.IntentFilters == nil || !(*act.Enabled) {
+				continue
+			}
+			for _, intent := range *act.IntentFilters {
+				if isMainIntentFilter(intent) {
+					return act.Name, nil
+				}
 			}
 		}
 	}
-	for _, act := range *manifest.Application.Activities {
-		if act.IntentFilters == nil {
-			continue
-		}
-		for _, intent := range *act.IntentFilters {
-			if isMainIntentFilter(intent) {
-				return act.Name, nil
+	if manifest.Application.Activities != nil {
+		for _, act := range *manifest.Application.Activities {
+			if act.IntentFilters == nil {
+				continue
+			}
+			for _, intent := range *act.IntentFilters {
+				if isMainIntentFilter(intent) {
+					return act.Name, nil
+				}
 			}
 		}
 	}
