@@ -11,7 +11,6 @@ type Manifest struct {
 	UsesPermissions *[]UsesPermission `xml:"uses-permission"`
 	UsesSDK         *UsesSDK          `xml:"uses-sdk"`
 	Activity        string
-	ActivityAlis    string
 }
 
 // Application is a declaration of an application.

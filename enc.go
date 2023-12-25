@@ -39,18 +39,23 @@ func GetApkInfo(apk string) (*APK, error) {
 	if err != nil {
 		return nil, err
 	}
-	activityAlis, err := MainActivity(app.manifest)
-	if err != nil {
-		return nil, err
-	}
 	app.manifest.Activity = activity
-	app.manifest.ActivityAlis = activityAlis
 	return app, nil
 }
 
 func MainActivity(manifest *Manifest) (activity string, err error) {
 	if manifest.Application.Activities == nil {
 		return "", fmt.Errorf("activities invalid")
+	}
+	for _, act := range *manifest.Application.ActivityAliases {
+		if act.IntentFilters == nil || !(*act.Enabled) {
+			continue
+		}
+		for _, intent := range *act.IntentFilters {
+			if isMainIntentFilter(intent) {
+				return act.Name, nil
+			}
+		}
 	}
 	for _, act := range *manifest.Application.Activities {
 		if act.IntentFilters == nil {
@@ -63,27 +68,6 @@ func MainActivity(manifest *Manifest) (activity string, err error) {
 		}
 	}
 	return "", fmt.Errorf("no main activity found")
-}
-
-func MainActivityAlis(manifest *Manifest) (activity string, err error) {
-	if manifest.Application.ActivityAliases == nil {
-		return "", fmt.Errorf("activities alis invalid")
-	}
-	if manifest.Application.ActivityAliases != nil {
-		length := len(*manifest.Application.ActivityAliases)
-		for i := length - 1; i >= 0; i-- {
-			act := (*manifest.Application.ActivityAliases)[i]
-			if act.IntentFilters == nil {
-				continue
-			}
-			for _, intent := range *act.IntentFilters {
-				if isMainIntentFilter(intent) {
-					return act.Name, nil
-				}
-			}
-		}
-	}
-	return "", fmt.Errorf("no main activity alis found")
 }
 
 func GetMainMainActivity(manifest *Manifest) (activity string, err error) {
