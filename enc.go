@@ -46,7 +46,10 @@ func GetApkInfo(apk string) (*APK, error) {
 func MainActivity(manifest *Manifest) (activity string, err error) {
 	if manifest.Application.ActivityAliases != nil {
 		for _, act := range *manifest.Application.ActivityAliases {
-			if act.IntentFilters == nil || !(*act.Enabled) {
+			if act.IntentFilters == nil {
+				continue
+			}
+			if act.Enabled != nil && !(*act.Enabled) {
 				continue
 			}
 			for _, intent := range *act.IntentFilters {
